@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request, RequestHandler } from 'express';
 
 import { SECRET_KEY } from '@config';
 import { verify } from 'jsonwebtoken';
@@ -10,7 +10,7 @@ import { StatusCodes } from 'http-status-codes';
 
 export const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
-    const authorizationHeader = req.headers['Authorization'] as string;
+    const authorizationHeader = req.headers['authorization'] as string;
     const accessToken = authorizationHeader ? authorizationHeader.split('Bearer ')[1] : null;
 
     if (accessToken) {
@@ -30,4 +30,10 @@ export const authMiddleware = async (req: RequestWithUser, res: Response, next: 
   } catch (error) {
     next(new HttpException(StatusCodes.UNAUTHORIZED, 'Wrong authentication token'));
   }
+};
+
+export const authMiddleware2 = (): RequestHandler => {
+  return async (req, res, next) => {
+    next();
+  };
 };

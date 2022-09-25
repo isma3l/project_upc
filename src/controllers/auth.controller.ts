@@ -10,9 +10,9 @@ export class AuthController {
   public signUp = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userData: CreateUserDto = req.body;
-      const signUpUserData: UserDto = await this.authService.signup(userData);
+      const { accessToken } = await this.authService.signup(userData);
 
-      res.status(StatusCodes.CREATED).json({ data: signUpUserData, message: 'signup' });
+      res.status(StatusCodes.CREATED).json({ accessToken });
     } catch (error) {
       next(error);
     }
@@ -23,7 +23,7 @@ export class AuthController {
       const userData: CreateUserDto = req.body;
       const { accessToken } = await this.authService.login(userData);
 
-      res.status(StatusCodes.OK).json({ accessToken, message: 'login' });
+      res.status(StatusCodes.OK).json({ accessToken });
     } catch (error) {
       next(error);
     }

@@ -1,6 +1,6 @@
 import App from '@/app';
-import { AuthRoute } from '@routes';
+import { AuthRoute, ProjectRoute } from '@routes';
 
-const app = new App([new AuthRoute()]);
+const app = new App([new AuthRoute(), new ProjectRoute()]);
 
 app.listen();

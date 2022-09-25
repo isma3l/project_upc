@@ -4,22 +4,22 @@ import { sign } from 'jsonwebtoken';
 
 import { SECRET_KEY } from '@config';
 import { PayloadToken, User } from '@interfaces';
-import { CreateUserDto, UserDto } from '@dtos';
+import { CreateUserDto } from '@dtos';
 import { userModel } from '@models';
-import { UserDtoMapper } from '@dtoMappers';
 import { HttpException } from '@exceptions';
 
 export class AuthService {
   public users = userModel;
 
-  public async signup(userData: CreateUserDto): Promise<UserDto> {
+  public async signup(userData: CreateUserDto): Promise<{ accessToken: string }> {
     const userFound: User | null = await this.users.findOne({ email: userData.email });
     if (userFound) throw new HttpException(StatusCodes.CONFLICT, `This email ${userData.email} already exists`);
 
     const hashedPassword = await hash(userData.password, 10);
     const createUserData: User = await this.users.create({ ...userData, password: hashedPassword });
 
-    return UserDtoMapper.map(createUserData);
+    const accessToken = this.createAccessToken(createUserData);
+    return { accessToken };
   }
 
   public async login(userData: CreateUserDto): Promise<{ accessToken: string }> {
