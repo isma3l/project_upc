@@ -1,6 +1,9 @@
 {
   "name": "node-express-typescript",
   "version": "1.0.0",
+  "engines": {
+    "yarn": "1.22.10"
+  },
   "main": "index.js",
   "author": "karlo ismael",
   "license": "MIT",
