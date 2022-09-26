@@ -60,7 +60,7 @@
     "winston-daily-rotate-file": "^4.7.1"
   },
   "scripts": {
-    "start": "yarn run build && cross-env NODE_ENV=production node dist/server.js",
+    "start": "node dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon",
     "build": "swc src -d dist --source-maps --copy-files",
     "build:tsc": "tsc && tsc-alias",
