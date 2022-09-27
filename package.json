@@ -2,7 +2,8 @@
   "name": "node-express-typescript",
   "version": "1.0.0",
   "engines": {
-    "yarn": "1.22.10"
+    "yarn": "1.22.10",
+    "node": "16.16.0"
   },
   "main": "index.js",
   "author": "karlo ismael",
