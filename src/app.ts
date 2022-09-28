@@ -68,9 +68,9 @@ class AppServer {
     const options = {
       swaggerDefinition: {
         info: {
-          title: 'REST API',
+          title: 'SOULBOUND TOKEN API',
           version: '3.0.3',
-          description: 'Example docs',
+          description: 'Documentación de la api usada para el proyecto',
         },
       },
       apis: ['swagger.yaml'],
