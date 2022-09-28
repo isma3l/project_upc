@@ -69,7 +69,7 @@ class AppServer {
       swaggerDefinition: {
         info: {
           title: 'SOULBOUND TOKEN API',
-          version: '3.0.3',
+          version: '1.0.0',
           description: 'Documentación de la api usada para el proyecto',
         },
       },
