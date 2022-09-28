@@ -69,7 +69,7 @@ class AppServer {
       swaggerDefinition: {
         info: {
           title: 'REST API',
-          version: '1.0.0',
+          version: '3.0.3',
           description: 'Example docs',
         },
       },

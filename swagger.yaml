@@ -1,0 +1,280 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Souldbound token
+  termsOfService: http://swagger.io/terms/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: user
+    description: Operations about user
+  - name: project
+    description: Operations about project
+schemes:
+  - https
+  - http
+paths:
+  /signup:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: This is used only by users who have not registered.
+      operationId: signupUser
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '201':
+          description: A JSON object containing the access token
+          schema:
+            $ref: '#/definitions/AccessToken'
+        '400':
+          description: Others errors
+        '409':
+          description: When using an email that has already been registered
+  /login:
+    post:
+      tags:
+        - user
+      summary: Login to the platform
+      description: This can be used by a user who has previously registered.
+      operationId: loginUser
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: A JSON object containing the access token
+          schema:
+            $ref: '#/definitions/AccessToken'
+        '400':
+          description: Other errors
+        '401':
+          description: Passwords don't match
+        '404':
+          description: The email wasn't found
+  /projects:
+    post:
+      tags:
+        - project
+      summary: Create a project
+      description: "This can only be done by the logged in user.\n\n* The description parameter is optional.\n* A user cannot have two projects with the same name.\n* The project name can have between 4 and 30 characters, which can be numbers, letters and the symbols '_' and '-'."
+      operationId: createProject
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Project object to be created
+          required: true
+          schema:
+            $ref: '#/definitions/Project'
+      responses:
+        '201':
+          description: A JSON object containing the access token
+          schema:
+            $ref: '#/definitions/ProjectCreated'
+        '400':
+          description: Others errors
+        '409':
+          description: User cannot have 2 projects with the same name
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - project
+      summary: Returns all projects of a user
+      description: This can only be done by the logged in user.
+      operationId: getProjects
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An object containing a list of projects
+          schema:
+              $ref: '#/definitions/Projects'
+        '400':
+          description: Others errors
+        '409':
+          description: User cannot have 2 projects with the same name
+      security:
+        - bearerAuth: []
+  /projects/{id}:
+    get:
+      tags:
+        - project
+      summary: Returns a project according to the id sent as a parameter
+      description: This can only be done by the logged in user.
+      operationId: getProjectById
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Project ID to be obtained
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An object containing a list of projects
+          schema:
+              $ref: '#/definitions/ProjectCreated'
+        '400':
+          description: Others errors
+        '404':
+          description: The project with the ID sent as parameter was not found.
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - project
+      summary: Delete a project according to the id sent as a parameter
+      description: This can only be done by the logged in user.
+      operationId: deleteProjectById
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Project ID of the project to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An object containing a list of projects
+          schema:
+              $ref: '#/definitions/ProjectCreated'
+        '400':
+          description: Others errors
+        '404':
+          description: The project with the ID sent as parameter was not found.
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - project
+      summary: Update a project 
+      description: "This can only be done by the logged in user.\n* Only the name and description can be updated. \n* A user cannot have two projects with the same name.\n* The project name can have between 4 and 30 characters, which can be numbers, letters and the symbols '_' and '-'."
+      operationId: updateProjectById
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Project ID of the project to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Project object to be updated
+          required: true
+          schema:
+            $ref: '#/definitions/Project'
+      responses:
+        '200':
+          description: An object containing a list of projects
+          schema:
+              $ref: '#/definitions/ProjectCreated'
+        '400':
+          description: Others errors
+        '404':
+          description: The project with the ID sent as parameter was not found.
+        '409':
+          description: User cannot have 2 projects with the same name
+      security:
+        - bearerAuth: []
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: JWT Authorization header
+definitions:
+  User:
+    type: object
+    properties:
+      email:
+        type: string
+        example: user@gmail.com
+      password:
+        type: string
+        example: '123456'
+  AccessToken:
+    type: object
+    properties:
+      accessToken:
+        type: string
+  Project:
+    type: object
+    properties:
+      name:
+        type: string
+        example: web_compras
+      description:
+        type: string
+        example: Tienda de ventas online
+  Projects:
+    type: object
+    properties:
+      projects:
+        type: array
+        items:
+          $ref: '#/definitions/ProjectCreated'
+  ProjectCreated:
+    type: object
+    properties:
+      id:
+        type: string
+        example: '34567890876543567831133'
+      name:
+        type: string
+        example: web_compras
+      description:
+        type: string
+        example: Tienda de ventas online
+      apiKey:
+        type: string
+        example: JXp03L_S32KD1U8J1-92FMS
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
