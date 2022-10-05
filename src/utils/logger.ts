@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import winston from 'winston';
-import winstonDaily from 'winston-daily-rotate-file';
+//import winstonDaily from 'winston-daily-rotate-file';
 import { LOG_DIR } from '@config';
 
 // logs dir
@@ -19,6 +19,7 @@ const logFormat = winston.format.printf(({ timestamp, level, message }) => `${ti
  * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
  */
 const logger = winston.createLogger({
+  level: 'debug',
   format: winston.format.combine(
     winston.format.timestamp({
       format: 'YYYY-MM-DD HH:mm:ss',
@@ -26,7 +27,7 @@ const logger = winston.createLogger({
     logFormat,
   ),
   transports: [
-    // debug log setting
+    /* // debug log setting
     new winstonDaily({
       level: 'debug',
       datePattern: 'YYYY-MM-DD',
@@ -46,15 +47,17 @@ const logger = winston.createLogger({
       handleExceptions: true,
       json: false,
       zippedArchive: true,
-    }),
+    }), */
   ],
 });
 
-logger.add(
-  new winston.transports.Console({
-    format: winston.format.combine(winston.format.splat(), winston.format.colorize()),
-  }),
-);
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.combine(winston.format.splat(), winston.format.colorize()),
+    }),
+  );
+}
 
 const stream = {
   write: (message: string) => {

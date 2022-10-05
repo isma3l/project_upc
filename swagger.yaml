@@ -11,6 +11,8 @@ tags:
     description: Operations about user
   - name: project
     description: Operations about project
+  - name: token
+    description: Operations about SBT
 schemes:
   - https
   - http
@@ -90,7 +92,7 @@ paths:
             $ref: '#/definitions/Project'
       responses:
         '201':
-          description: A JSON object containing the access token
+          description: A JSON object containing a new project
           schema:
             $ref: '#/definitions/ProjectCreated'
         '400':
@@ -146,7 +148,7 @@ paths:
           type: string
       responses:
         '200':
-          description: An object containing a list of projects
+          description: An object containing project
           schema:
               $ref: '#/definitions/ProjectCreated'
         '400':
@@ -176,7 +178,7 @@ paths:
           type: string
       responses:
         '200':
-          description: An object containing a list of projects
+          description: An object containing a deleted project
           schema:
               $ref: '#/definitions/ProjectCreated'
         '400':
@@ -212,7 +214,7 @@ paths:
             $ref: '#/definitions/Project'
       responses:
         '200':
-          description: An object containing a list of projects
+          description: An object containing a updated project
           schema:
               $ref: '#/definitions/ProjectCreated'
         '400':
@@ -221,6 +223,160 @@ paths:
           description: The project with the ID sent as parameter was not found.
         '409':
           description: User cannot have 2 projects with the same name
+      security:
+        - bearerAuth: []
+  /tokens:
+    post:
+      tags:
+        - token
+      summary: Create a Token
+      description: "This can only be done by the logged in user.\n* There cannot be two Tokens with the same address."
+      operationId: createToken
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Token object to be created
+          required: true
+          schema:
+            $ref: '#/definitions/Token'
+      responses:
+        '201':
+          description: A JSON object containing a new token
+          schema:
+            $ref: '#/definitions/TokenCreated'
+        '400':
+          description: Others errors
+        '409':
+          description: A token with the same address already exists.
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - token
+      summary: Returns all tokens
+      description: This can only be done by the logged in user.
+      operationId: getTokens
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An object containing a list of tokens
+          schema:
+              $ref: '#/definitions/Tokens'
+        '400':
+          description: Others errors
+      security:
+        - bearerAuth: []
+  /tokens/{id}:
+    get:
+      tags:
+        - token
+      summary: Returns a token according to the id sent as a parameter
+      description: This can only be done by the logged in user.
+      operationId: getTokenById
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Token ID to be obtained
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An object containing a token
+          schema:
+              $ref: '#/definitions/TokenCreated'
+        '400':
+          description: Others errors
+        '404':
+          description: The token with the ID sent as parameter was not found.
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - token
+      summary: Delete a token according to the id sent as a parameter
+      description: This can only be done by the logged in user.
+      operationId: deleteTokenById
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Token ID of the token to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An object containing a deleted token
+          schema:
+              $ref: '#/definitions/TokenCreated'
+        '400':
+          description: Others errors
+        '404':
+          description: The token with the ID sent as parameter was not found.
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - token
+      summary: Update a token 
+      description: "This can only be done by the logged in user.\n* There cannot be two Sbt with the same address."
+      operationId: updateProjectById
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Token ID of the token to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Token object to be updated
+          required: true
+          schema:
+            $ref: '#/definitions/Token'
+      responses:
+        '200':
+          description: An object containing a updated token
+          schema:
+              $ref: '#/definitions/TokenCreated'
+        '400':
+          description: Others errors
+        '404':
+          description: The token with the ID sent as parameter was not found.
+        '409':
+          description: A token with the same address exists
       security:
         - bearerAuth: []
 securityDefinitions:
@@ -275,6 +431,40 @@ definitions:
       apiKey:
         type: string
         example: JXp03L_S32KD1U8J1-92FMS
+  Token:
+    type: object
+    properties:
+      address:
+        type: string
+        example: '0x7B637E248EF0EdE6d22e88c209e635c03e587711'
+      name:
+        type: string
+        example: 'Passport'
+      network_name:
+        type: string
+        example: 'Goerli'
+  TokenCreated:
+    type: object
+    properties:
+      id:
+        type: string
+        example: '34567890876543567831133'
+      address:
+        type: string
+        example: '0x7B637E248EF0EdE6d22e88c209e635c03e587711'
+      name:
+        type: string
+        example: 'Passport'
+      network_name:
+        type: string
+        example: 'Goerli'
+  Tokens:
+    type: object
+    properties:
+      tokens:
+        type: array
+        items:
+          $ref: '#/definitions/TokenCreated' 
 externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io

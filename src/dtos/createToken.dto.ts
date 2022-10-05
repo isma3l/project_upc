@@ -11,4 +11,4 @@ export class CreateTokentDto {
   public network_name: string;
 }
 
-export type updateTokenDto = CreateTokentDto;
+export type UpdateTokenDto = CreateTokentDto;

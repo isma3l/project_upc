@@ -19,7 +19,7 @@ class ProjectRoute implements Routes {
     this.router.get(this.path, authMiddleware, this.projectController.getAllProjects);
     this.router.get(`${this.path}/:id`, authMiddleware, this.projectController.getProjectById);
     this.router.delete(`${this.path}/:id`, authMiddleware, this.projectController.deleteProjectById);
-    this.router.patch(`${this.path}/:id`, authMiddleware, validationMiddleware(UpdateProjectDto), this.projectController.modifyProject);
+    this.router.put(`${this.path}/:id`, authMiddleware, validationMiddleware(UpdateProjectDto), this.projectController.modifyProject);
   }
 }
 

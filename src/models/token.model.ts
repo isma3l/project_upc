@@ -6,6 +6,7 @@ const tokenSchema = new Schema<Token>(
     address: {
       type: String,
       required: true,
+      unique: true,
     },
     name: {
       type: String,

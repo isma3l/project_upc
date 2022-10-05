@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { NextFunction, Request, Response } from 'express';
 
 import { TokenService } from '@services';
-import { CreateTokentDto, TokenDto } from '@dtos';
+import { CreateTokentDto, TokenDto, UpdateTokenDto } from '@dtos';
 import { RequestWithUser } from '@interfaces';
 
 export class TokenController {
@@ -19,32 +19,31 @@ export class TokenController {
     }
   };
 
-  /* public getProjectById = async (req: Request, res: Response, next: NextFunction) => {
+  public getAllTokens = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const projectId = req.params.id;
-      const projectData: ProjectDto = await this.projectService.getProjectById(projectId);
+      const tokens: TokenDto[] = await this.tokenService.getAllTokens();
 
-      res.status(StatusCodes.OK).json(projectData);
+      res.status(StatusCodes.OK).json({ tokens });
     } catch (error) {
       next(error);
     }
   };
 
-  public getAllProjects = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public getTokenById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = req.user?._id;
-      const projects: ProjectDto[] = await this.projectService.getAllProjects(userId);
+      const tokenId = req.params.id;
+      const tokenData: TokenDto = await this.tokenService.getTokenById(tokenId);
 
-      res.status(StatusCodes.OK).json({ projects });
+      res.status(StatusCodes.OK).json(tokenData);
     } catch (error) {
       next(error);
     }
   };
 
-  public deleteProjectById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public deleteTokenById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const projectId = req.params.id;
-      const deletedProject: ProjectDto = await this.projectService.deleteProjectById(projectId);
+      const tokenId = req.params.id;
+      const deletedProject: TokenDto = await this.tokenService.deleteTokenById(tokenId);
 
       res.status(StatusCodes.OK).json(deletedProject);
     } catch (error) {
@@ -52,16 +51,15 @@ export class TokenController {
     }
   };
 
-  public modifyProject = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public updateToken = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const userId = req.user?._id;
-      const projectId = req.params.id;
-      const projectData: UpdateProjectDto = req.body;
-      const modifiedProject = await this.projectService.modifyProject(projectId, projectData, userId);
+      const tokenId = req.params.id;
+      const tokenData: UpdateTokenDto = req.body;
+      const updatedProject = await this.tokenService.updateToken(tokenId, tokenData);
 
-      res.status(StatusCodes.OK).json(modifiedProject);
+      res.status(StatusCodes.OK).json(updatedProject);
     } catch (error) {
       next(error);
     }
-  }; */
+  };
 }
