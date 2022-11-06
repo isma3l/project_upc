@@ -10,8 +10,9 @@ export class TokenController {
 
   public createToken = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
+      const projectId = req.params.projectId;
       const tokenData: CreateTokentDto = req.body;
-      const createdTokenData: TokenDto = await this.tokenService.createToken(tokenData);
+      const createdTokenData: TokenDto = await this.tokenService.createToken(tokenData, projectId);
 
       res.status(StatusCodes.CREATED).json(createdTokenData);
     } catch (error) {
@@ -19,10 +20,10 @@ export class TokenController {
     }
   };
 
-  public getAllTokens = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public getTokens = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const tokens: TokenDto[] = await this.tokenService.getAllTokens();
-
+      const projectId = req.params.projectId;
+      const tokens: TokenDto[] = await this.tokenService.getProjectTokens(projectId);
       res.status(StatusCodes.OK).json({ tokens });
     } catch (error) {
       next(error);
@@ -31,8 +32,8 @@ export class TokenController {
 
   public getTokenById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const tokenId = req.params.id;
-      const tokenData: TokenDto = await this.tokenService.getTokenById(tokenId);
+      const { tokenId, projectId } = req.params;
+      const tokenData: TokenDto = await this.tokenService.getTokenById(projectId, tokenId);
 
       res.status(StatusCodes.OK).json(tokenData);
     } catch (error) {
@@ -40,22 +41,22 @@ export class TokenController {
     }
   };
 
-  public deleteTokenById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public deleteTokens = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const tokenId = req.params.id;
-      const deletedProject: TokenDto = await this.tokenService.deleteTokenById(tokenId);
+      const { tokenId, projectId } = req.params;
+      const deletedToken: TokenDto = await this.tokenService.deleteTokenById(projectId, tokenId);
 
-      res.status(StatusCodes.OK).json(deletedProject);
+      res.status(StatusCodes.OK).json(deletedToken);
     } catch (error) {
       next(error);
     }
   };
 
-  public updateToken = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public updateTokenById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const tokenId = req.params.id;
+      const { tokenId, projectId } = req.params;
       const tokenData: UpdateTokenDto = req.body;
-      const updatedProject = await this.tokenService.updateToken(tokenId, tokenData);
+      const updatedProject = await this.tokenService.updateToken(projectId, tokenId, tokenData);
 
       res.status(StatusCodes.OK).json(updatedProject);
     } catch (error) {

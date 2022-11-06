@@ -6,7 +6,7 @@ import { TokenController } from '@controllers';
 import { CreateTokentDto } from '@dtos';
 
 class TokenRoute implements Routes {
-  public path = '/tokens';
+  public path = '/projects';
   public router: Router = Router();
   private tokenController: TokenController = new TokenController();
 
@@ -15,11 +15,16 @@ class TokenRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(this.path, authMiddleware, validationMiddleware(CreateTokentDto), this.tokenController.createToken);
-    this.router.get(this.path, authMiddleware, this.tokenController.getAllTokens);
-    this.router.get(`${this.path}/:id`, authMiddleware, this.tokenController.getTokenById);
-    this.router.delete(`${this.path}/:id`, authMiddleware, this.tokenController.deleteTokenById);
-    this.router.put(`${this.path}/:id`, authMiddleware, validationMiddleware(CreateTokentDto), this.tokenController.updateToken);
+    this.router.post(`${this.path}/:projectId/tokens`, authMiddleware, validationMiddleware(CreateTokentDto), this.tokenController.createToken);
+    this.router.get(`${this.path}/:projectId/tokens`, authMiddleware, this.tokenController.getTokens);
+    this.router.get(`${this.path}/:projectId/tokens/:tokenId`, authMiddleware, this.tokenController.getTokenById);
+    this.router.delete(`${this.path}/:projectId/tokens/:tokenId`, authMiddleware, this.tokenController.deleteTokens);
+    this.router.put(
+      `${this.path}/:projectId/tokens/:tokenId`,
+      authMiddleware,
+      validationMiddleware(CreateTokentDto),
+      this.tokenController.updateTokenById,
+    );
   }
 }
 

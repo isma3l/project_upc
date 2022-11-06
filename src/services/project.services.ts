@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import Crypto from 'crypto';
 
 import { HttpException } from '@exceptions';
-import { Project, User } from '@interfaces';
+import { Project } from '@interfaces';
 import { ProjectDtoMapper } from '@dtoMappers';
 import { projectModel } from '@models';
 import { ProjectDto, CreateProjectDto, UpdateProjectDto } from '@dtos';

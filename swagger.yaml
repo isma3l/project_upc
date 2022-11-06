@@ -346,7 +346,7 @@ paths:
         - token
       summary: Update a token 
       description: "This can only be done by the logged in user.\n* There cannot be two Sbt with the same address."
-      operationId: updateProjectById
+      operationId: updateTokenById
       produces:
         - application/json
       parameters:
