@@ -2,11 +2,19 @@ Pasos para probar en el ambiente de desarrollo:
 
 Ejecución local:
 
-1. Instalar dependencias
-    yarn install
-2. Ejecutar el proyecto en el ambiente de desarrollo
-    yarn run dev
+    1. Instalar dependencias
+        yarn install
+    2. Ejecutar el proyecto en el ambiente de desarrollo
+        yarn run dev
 
-Url base: http://localhost:3000
+    Url base: http://localhost:3000
+
+Deploy en Heroku:
+
+    1. Iniciar sesion de heroku, si se hace desde la terminal:
+        heroku login    -> Iniciar sesion en el navegador
+    2. Deployar cambios:
+        yarn run deploy
+
 
 
