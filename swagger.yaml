@@ -126,7 +126,7 @@ paths:
           description: User cannot have 2 projects with the same name
       security:
         - bearerAuth: []
-  /projects/{id}:
+  /projects/{ProjectId}:
     get:
       tags:
         - project
@@ -141,7 +141,7 @@ paths:
           description: "JWT access token. Value: Bearer {Token}"
           required: true
           type: string
-        - name: id
+        - name: ProjectId
           in: path
           description: Project ID to be obtained
           required: true
@@ -171,7 +171,7 @@ paths:
           description: "JWT access token. Value: Bearer {Token}"
           required: true
           type: string
-        - name: id
+        - name: ProjectId
           in: path
           description: Project ID of the project to be deleted
           required: true
@@ -201,7 +201,7 @@ paths:
           description: "JWT access token. Value: Bearer {Token}"
           required: true
           type: string
-        - name: id
+        - name: ProjectId
           in: path
           description: Project ID of the project to be updated
           required: true
@@ -225,7 +225,7 @@ paths:
           description: User cannot have 2 projects with the same name
       security:
         - bearerAuth: []
-  /tokens:
+  /tokens/{projectId}/tokens:
     post:
       tags:
         - token
@@ -238,6 +238,11 @@ paths:
         - in: header
           name: Authorization
           description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          description: "Project ID where a token will be created"
           required: true
           type: string
         - in: body
@@ -271,6 +276,11 @@ paths:
           description: "JWT access token. Value: Bearer {Token}"
           required: true
           type: string
+        - name: projectId
+          in: path
+          required: true
+          description: "Project ID from which tokens will be obtained"
+          type: string
       responses:
         '200':
           description: An object containing a list of tokens
@@ -280,11 +290,11 @@ paths:
           description: Others errors
       security:
         - bearerAuth: []
-  /tokens/{id}:
+  /tokens/{projectId}/tokens/{tokenId}:
     get:
       tags:
         - token
-      summary: Returns a token according to the id sent as a parameter
+      summary: Returns a token according to the projectId and tokenId sent as a parameter
       description: This can only be done by the logged in user.
       operationId: getTokenById
       produces:
@@ -295,9 +305,12 @@ paths:
           description: "JWT access token. Value: Bearer {Token}"
           required: true
           type: string
-        - name: id
+        - name: projectId
           in: path
-          description: Token ID to be obtained
+          required: true
+          type: string
+        - name: tokenId
+          in: path
           required: true
           type: string
       responses:
@@ -325,9 +338,12 @@ paths:
           description: "JWT access token. Value: Bearer {Token}"
           required: true
           type: string
-        - name: id
+        - name: projectId
           in: path
-          description: Token ID of the token to be deleted
+          required: true
+          type: string  
+        - name: tokenId
+          in: path
           required: true
           type: string
       responses:
@@ -355,9 +371,12 @@ paths:
           description: "JWT access token. Value: Bearer {Token}"
           required: true
           type: string
-        - name: id
+        - name: projectId
           in: path
-          description: Token ID of the token to be updated
+          required: true
+          type: string  
+        - name: tokenId
+          in: path
           required: true
           type: string
         - in: body
@@ -431,6 +450,11 @@ definitions:
       apiKey:
         type: string
         example: JXp03L_S32KD1U8J1-92FMS
+      tokens:
+        type: array
+        items:
+          $ref: '#/definitions/Tokens'
+        example: []
   Token:
     type: object
     properties:
