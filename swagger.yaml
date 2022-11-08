@@ -225,7 +225,7 @@ paths:
           description: User cannot have 2 projects with the same name
       security:
         - bearerAuth: []
-  /tokens/{projectId}/tokens:
+  /projects/{projectId}/tokens:
     post:
       tags:
         - token
@@ -290,7 +290,7 @@ paths:
           description: Others errors
       security:
         - bearerAuth: []
-  /tokens/{projectId}/tokens/{tokenId}:
+  /projects/{projectId}/tokens/{tokenId}:
     get:
       tags:
         - token
