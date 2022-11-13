@@ -432,7 +432,7 @@ paths:
           schema:
               $ref: '#/definitions/Sbts'
         '400':
-          description: Others errors
+          description: The wallet address is invalid. Others errors
         '404':
           description: This project with projectId was not found
         '409':
