@@ -398,6 +398,48 @@ paths:
           description: A token with the same address exists
       security:
         - bearerAuth: []
+  /sbts/projects/{projectId}/wallet/{walletAddress}:
+    get:
+      tags:
+        - sbts
+      summary: Returns a list of sbts of the user who can manage the project
+      description: This can only be done by the logged in user.
+      operationId: getSbtsFromWalletAddress
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: "JWT access token. Value: Bearer {Token}"
+          required: true
+          type: string
+        - in: header
+          name: apikey
+          description: "Project api key"
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: walletAddress
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An object containing a token
+          schema:
+              $ref: '#/definitions/Sbts'
+        '400':
+          description: Others errors
+        '404':
+          description: This project with projectId was not found
+        '409':
+          description: The apikey is invalid
+      security:
+        - bearerAuth: []
+  
 securityDefinitions:
   bearerAuth:
     type: apiKey
@@ -489,6 +531,27 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/TokenCreated' 
+  Sbt:
+    type: object
+    properties:
+      sbt_name:
+        type: string
+        example: 'Club de Barcelona'
+      sbt_address:
+        type: string
+        example: '0x4480624B9e24877EA8811D118EC53B34eBfD9532'
+      ids:
+        type: array
+        items:
+          type: string
+        example: ["0", "4", "100"]
+  Sbts:
+    type: object
+    properties:
+      sbts:
+        type: array
+        items:
+          $ref: '#/definitions/Sbt'
 externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io

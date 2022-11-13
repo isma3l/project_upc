@@ -14,7 +14,7 @@ class ContractRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:projectId/wallet/:address`, authMiddleware, this.contractController.getSbtsFromUser);
+    this.router.get(`${this.path}/:projectId/wallet/:walletAddress`, authMiddleware, this.contractController.getSbtsFromUser);
   }
 }
 
