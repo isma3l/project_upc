@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { getContractInstance } from '@contract';
+import { getContractInstance, isAddress } from '@contract';
 import { HttpException } from '@exceptions';
 import { projectModel } from '@models';
 import { SbtDto } from '@dtos';
@@ -13,6 +13,8 @@ export class ContractService {
     if (!projectFound) throw new HttpException(StatusCodes.NOT_FOUND, `This project with id ${projectId} was not found`);
 
     if (projectFound.api_key !== apiKey) throw new HttpException(StatusCodes.CONFLICT, `The apikey ${apiKey} is invalid`);
+
+    if (!isAddress(walletAddress)) throw new HttpException(StatusCodes.BAD_REQUEST, `the wallet address ${walletAddress} is invalid`);
 
     const tokens = projectFound.tokens;
     const result: SbtDto[] = [];
