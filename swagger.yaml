@@ -398,7 +398,7 @@ paths:
           description: A token with the same address exists
       security:
         - bearerAuth: []
-  /sbts/projects/{projectId}/wallet/{walletAddress}:
+  /sbts/projects/apikey/{apiKey}/wallet/{walletAddress}:
     get:
       tags:
         - sbts
@@ -408,17 +408,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: header
-          name: Authorization
-          description: "JWT access token. Value: Bearer {Token}"
-          required: true
-          type: string
-        - in: header
-          name: apikey
-          description: "Project api key"
-          required: true
-          type: string
-        - name: projectId
+        - name: apikey
           in: path
           required: true
           type: string

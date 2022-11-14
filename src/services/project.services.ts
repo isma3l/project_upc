@@ -25,7 +25,7 @@ export class ProjectService {
   }
 
   private createApiKey(size = DEFAULT_API_KEY_SIZE): string {
-    return Crypto.randomBytes(size).toString('base64').slice(0, size);
+    return Crypto.randomBytes(size).toString('base64').replace('/', '0').replace('+', '0').slice(0, size);
   }
 
   public async getProjectById(projectId: string): Promise<ProjectDto> {

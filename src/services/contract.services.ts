@@ -8,11 +8,9 @@ import { SbtDto } from '@dtos';
 export class ContractService {
   public projects = projectModel;
 
-  public getSbts = async (projectId: string, apiKey: string, walletAddress: string): Promise<SbtDto[]> => {
-    const projectFound = await this.projects.findById(projectId);
-    if (!projectFound) throw new HttpException(StatusCodes.NOT_FOUND, `This project with id ${projectId} was not found`);
-
-    if (projectFound.api_key !== apiKey) throw new HttpException(StatusCodes.CONFLICT, `The apikey ${apiKey} is invalid`);
+  public getSbts = async (api_key: string, walletAddress: string): Promise<SbtDto[]> => {
+    const projectFound = await this.projects.findOne({ api_key });
+    if (!projectFound) throw new HttpException(StatusCodes.NOT_FOUND, `The project with api key ${api_key} was not found`);
 
     if (!isAddress(walletAddress)) throw new HttpException(StatusCodes.BAD_REQUEST, `the wallet address ${walletAddress} is invalid`);
 

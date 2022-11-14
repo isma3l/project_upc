@@ -1,7 +1,6 @@
 import { Router } from 'express';
 
 import { Routes } from '@/interfaces';
-import { authMiddleware } from '@middlewares';
 import { ContractController } from '@controllers';
 
 class ContractRoute implements Routes {
@@ -14,7 +13,7 @@ class ContractRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:projectId/wallet/:walletAddress`, authMiddleware, this.contractController.getSbtsFromUser);
+    this.router.get(`${this.path}/apikey/:apiKey/wallet/:walletAddress`, this.contractController.getSbtsFromUser);
   }
 }
 

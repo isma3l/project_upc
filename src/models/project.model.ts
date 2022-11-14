@@ -10,6 +10,7 @@ const projectSchema = new Schema<Project>(
     api_key: {
       type: String,
       required: true,
+      unique: true,
     },
     name: {
       type: String,

@@ -8,10 +8,9 @@ export class ContractController {
 
   public getSbtsFromUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { projectId, walletAddress } = req.params;
-      const apiKey = req.headers['apikey'] as string;
+      const { apiKey, walletAddress } = req.params;
 
-      const sbts = await this.contractService.getSbts(projectId, apiKey, walletAddress);
+      const sbts = await this.contractService.getSbts(apiKey, walletAddress);
 
       res.status(StatusCodes.OK).json({ sbts });
     } catch (error) {
