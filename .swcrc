@@ -39,7 +39,9 @@
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
       "@services": ["services"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@contract": ["contract"],
+      "@contract/*": ["contract/*"]
     }
   },
   "module": {
