@@ -17,4 +17,15 @@ export class ContractController {
       next(error);
     }
   };
+
+  public mintSbt = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { apiKey, walletAddress } = req.params;
+      const sbts = await this.contractService.minSbt(apiKey, walletAddress);
+
+      res.status(StatusCodes.OK).json({ sbts });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

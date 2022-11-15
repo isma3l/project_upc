@@ -403,12 +403,11 @@ paths:
       tags:
         - sbts
       summary: Returns a list of sbts of the user who can manage the project
-      description: This can only be done by the logged in user.
       operationId: getSbtsFromWalletAddress
       produces:
         - application/json
       parameters:
-        - name: apikey
+        - name: apiKey
           in: path
           required: true
           type: string
@@ -418,7 +417,7 @@ paths:
           type: string
       responses:
         '200':
-          description: An object containing a token
+          description: An object containing a list of token
           schema:
               $ref: '#/definitions/Sbts'
         '400':
@@ -429,7 +428,36 @@ paths:
           description: The apikey is invalid
       security:
         - bearerAuth: []
-  
+    post:
+      tags:
+        - sbts
+      summary: Mint a token and returns a list of sbts. If it is the first time the list is coined it will have only one id
+      operationId: mintSbtFromWalletAddress
+      produces:
+        - application/json
+      parameters:
+        - name: apiKey
+          in: path
+          required: true
+          type: string
+        - name: walletAddress
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An object containing a list of token
+          schema:
+              $ref: '#/definitions/ListAuthSbt'
+        '400':
+          description: The wallet address is invalid. Others errors
+        '404':
+          description: This project with projectId was not found
+        '409':
+          description: The apikey is invalid
+      security:
+        - bearerAuth: []
+        
 securityDefinitions:
   bearerAuth:
     type: apiKey
@@ -535,6 +563,27 @@ definitions:
         items:
           type: string
         example: ["0", "4", "100"]
+  AuthSbt:
+    type: object
+    properties:
+      sbt_name:
+        type: string
+        example: 'Platform Authentication'
+      sbt_address:
+        type: string
+        example: '0xb71a8C5F402338f3014Ef932C240d9879640Abfb'
+      ids:
+        type: array
+        items:
+          type: string
+        example: ["0"]
+  ListAuthSbt:
+    type: object
+    properties:
+      sbts:
+        type: array
+        items:
+          $ref: '#/definitions/AuthSbt'
   Sbts:
     type: object
     properties:

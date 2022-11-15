@@ -1,2 +1,2 @@
-export { default as getContractInstance } from './instance';
+export { getContractInstance, mintSBT, getSbtsFromUser, getPlatformSbtFromUser } from './instance';
 export { isAddress } from './utils';

@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { getContractInstance, isAddress } from '@contract';
+import { getPlatformSbtFromUser, isAddress, mintSBT, getSbtsFromUser } from '@contract';
 import { HttpException } from '@exceptions';
 import { projectModel } from '@models';
 import { SbtDto } from '@dtos';
@@ -15,30 +15,20 @@ export class ContractService {
     if (!isAddress(walletAddress)) throw new HttpException(StatusCodes.BAD_REQUEST, `the wallet address ${walletAddress} is invalid`);
 
     const tokens = projectFound.tokens;
-    const result: SbtDto[] = [];
 
-    for (const token of tokens) {
-      const contract = getContractInstance(token.address);
-      const logs = await contract.queryFilter(contract.filters.Transfer(null, walletAddress));
+    const sbts: SbtDto[] = await getSbtsFromUser(tokens, walletAddress);
+    return sbts;
+  };
 
-      const sbt: SbtDto = {
-        sbt_address: token.address,
-        sbt_name: token.name,
-        ids: [],
-      };
+  public minSbt = async (api_key: string, walletAddress: string): Promise<SbtDto[]> => {
+    const projectFound = await this.projects.findOne({ api_key });
+    if (!projectFound) throw new HttpException(StatusCodes.NOT_FOUND, `The project with api key ${api_key} was not found`);
 
-      for (const log of logs) {
-        if (log.args) {
-          const { tokenId } = log.args;
-          sbt.ids.push(tokenId.toString());
-        }
-      }
+    if (!isAddress(walletAddress)) throw new HttpException(StatusCodes.BAD_REQUEST, `the wallet address ${walletAddress} is invalid`);
 
-      if (sbt.ids.length > 0) {
-        result.push(sbt);
-      }
-    }
+    await mintSBT(walletAddress);
 
-    return result;
+    const sbts: SbtDto[] = await getPlatformSbtFromUser(walletAddress);
+    return sbts;
   };
 }
